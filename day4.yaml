@@ -1,0 +1,33 @@
+---
+
+- name: get arp information
+
+  hosts: R1
+
+  gather_facts: false
+
+  connection: local #local execution on the controller  
+
+  tasks:
+
+  - name: run multiple command on remote nodes
+
+    ios_command: # run command on remote devices running Cisco Ios
+
+      commands:
+
+       - show version
+
+       - show ip int brief
+
+       
+
+    register: print_output
+
+  - debug: var=print_output.stdout_lines
+
+  - name: save output to a file
+
+    copy: content="{{print_output.stdout[0]}}" dest="./output/{{inventory_hostname}}.txt"
+
+
